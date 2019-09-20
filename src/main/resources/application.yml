@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: deep-in-java
+
+server:
+  port: 8888
