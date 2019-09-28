@@ -4,3 +4,11 @@ spring:
 
 server:
   port: 8888
+
+just:
+  thread:
+    pool:
+      enable: true
+      corePoolSize: 50
+      queueCapacity: 500
+      maxPoolSize: 80
