@@ -1,10 +1,12 @@
 package priv.just1984.deep.in.java.demo.business.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import priv.just1984.deep.in.java.demo.business.factory.ExportTaskFactory;
 import priv.just1984.deep.in.java.demo.business.service.ExportService;
-import priv.just1984.deep.in.java.demo.business.task.ExportTask;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 /**
  * @description:
@@ -14,10 +16,15 @@ import java.util.concurrent.CompletableFuture;
 @Service
 public class ExportServiceImpl implements ExportService {
 
+    @Autowired
+    private Executor executor;
+
     @Override
     public void export() {
-        /*CompletableFuture<Void> future = CompletableFuture.runAsync(new ExportTask<>());
-        future.whenComplete()*/
+        CompletableFuture<Void> future = CompletableFuture.runAsync(ExportTaskFactory.INSTANCE.getExportTask());
+        future.whenComplete((result, exception) -> {
+            //
+        });
     }
 
 }

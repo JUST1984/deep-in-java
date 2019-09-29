@@ -4,7 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import priv.just1984.deep.in.java.demo.business.consumer.ExportableConsumer;
 import priv.just1984.deep.in.java.demo.business.domain.Exportable;
 import priv.just1984.deep.in.java.demo.business.producer.ExportableProducer;
+import priv.just1984.deep.in.java.demo.exception.ExportException;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
@@ -53,7 +55,13 @@ public abstract class ExportTask<T extends Exportable> implements Runnable {
             exportCountDown.await();
         } catch (InterruptedException e) {
             log.error("export task interrupted", e);
+            throw new ExportException();
         }
+        log.info("export finish, cost {} seconds", Duration.between(start, Instant.now()).toMillis() / 1000);
+    }
+
+    public double getRate() {
+        return ((double) exportCount - (double) exportCountDown.getCount()) / (double) exportCount;
     }
 
     protected int getQueueCapacity() {
@@ -80,7 +88,6 @@ public abstract class ExportTask<T extends Exportable> implements Runnable {
      * 构建消费者任务
      * @param queue
      * @param exportCountDown
-     * @param executor
      * @return
      */
     protected abstract ExportableConsumer<T> generateConsumer(BlockingQueue<T> queue, CountDownLatch exportCountDown);
