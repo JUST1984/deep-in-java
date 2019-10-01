@@ -8,10 +8,7 @@ import priv.just1984.deep.in.java.demo.exception.ExportException;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Executor;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.*;
 
 /**
  * @description:
@@ -22,6 +19,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 public abstract class ExportTask<T extends Exportable> implements Runnable {
 
     private static final int DEFAULT_QUEUE_CAPACITY = 1000;
+
+    private static final int DEFAULT_MAX_EXPORT_SECONDS = 600;
 
     private Executor executor;
 
@@ -52,7 +51,7 @@ public abstract class ExportTask<T extends Exportable> implements Runnable {
         executor.execute(producer);
         executor.execute(consumer);
         try {
-            exportCountDown.await();
+            exportCountDown.await(DEFAULT_MAX_EXPORT_SECONDS, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             log.error("export task interrupted", e);
             throw new ExportException();

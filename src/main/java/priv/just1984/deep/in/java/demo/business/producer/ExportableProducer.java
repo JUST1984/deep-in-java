@@ -37,6 +37,7 @@ public abstract class ExportableProducer<T extends Exportable> implements Runnab
                 Iterator<T> iterator = exportableList.iterator();
                 while (iterator.hasNext()) {
                     queue.put(iterator.next());
+                    iterator.remove();
                 }
             } while (hasMore());
         } catch (Exception e) {

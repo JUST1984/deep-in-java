@@ -1,7 +1,9 @@
 package priv.just1984.deep.in.java.demo.business.task;
 
 import priv.just1984.deep.in.java.demo.business.consumer.ExportableConsumer;
+import priv.just1984.deep.in.java.demo.business.consumer.ExportableOrderConsumer;
 import priv.just1984.deep.in.java.demo.business.domain.ExportableOrder;
+import priv.just1984.deep.in.java.demo.business.producer.ExportableOrderProducer;
 import priv.just1984.deep.in.java.demo.business.producer.ExportableProducer;
 
 import java.util.concurrent.BlockingQueue;
@@ -26,12 +28,12 @@ public class OrderExportTask extends ExportTask<ExportableOrder> {
 
     @Override
     protected ExportableProducer<ExportableOrder> generateProducer(BlockingQueue<ExportableOrder> queue, CountDownLatch exportCountDown, Executor executor) {
-        return null;
+        return new ExportableOrderProducer(queue, exportCountDown, executor);
     }
 
     @Override
     protected ExportableConsumer<ExportableOrder> generateConsumer(BlockingQueue<ExportableOrder> queue, CountDownLatch exportCountDown) {
-        return null;
+        return new ExportableOrderConsumer(queue, exportCountDown);
     }
 
 }

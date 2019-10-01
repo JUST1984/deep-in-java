@@ -2,6 +2,7 @@ package priv.just1984.deep.in.java.demo.business.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import priv.just1984.deep.in.java.demo.business.enums.ExportType;
 import priv.just1984.deep.in.java.demo.business.factory.ExportTaskFactory;
 import priv.just1984.deep.in.java.demo.business.service.ExportService;
 
@@ -21,7 +22,7 @@ public class ExportServiceImpl implements ExportService {
 
     @Override
     public void export() {
-        CompletableFuture<Void> future = CompletableFuture.runAsync(ExportTaskFactory.INSTANCE.getExportTask());
+        CompletableFuture<Void> future = CompletableFuture.runAsync(ExportTaskFactory.INSTANCE.getExportTask(ExportType.ORDER, executor));
         future.whenComplete((result, exception) -> {
             //
         });
