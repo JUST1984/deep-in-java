@@ -12,7 +12,7 @@ import java.util.concurrent.CountDownLatch;
  * @date: 2019-09-28 14:04
  */
 @Slf4j
-public abstract class ProcessTask<T extends Exportable> implements Runnable {
+public abstract class AbstractProcessTask<T extends Exportable> implements Runnable {
 
     private List<T> exportableList;
 
@@ -20,7 +20,7 @@ public abstract class ProcessTask<T extends Exportable> implements Runnable {
 
     private CountDownLatch processCountDown;
 
-    public ProcessTask(List<T> exportableList, CountDownLatch exportCountDown, CountDownLatch processCountDown) {
+    public AbstractProcessTask(List<T> exportableList, CountDownLatch exportCountDown, CountDownLatch processCountDown) {
         this.exportableList = exportableList;
         this.exportCountDown = exportCountDown;
         this.processCountDown = processCountDown;

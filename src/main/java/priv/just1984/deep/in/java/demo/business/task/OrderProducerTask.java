@@ -1,7 +1,6 @@
-package priv.just1984.deep.in.java.demo.business.producer;
+package priv.just1984.deep.in.java.demo.business.task;
 
 import priv.just1984.deep.in.java.demo.business.domain.ExportableOrder;
-import priv.just1984.deep.in.java.demo.business.task.ProcessTask;
 
 import java.util.Comparator;
 import java.util.List;
@@ -9,14 +8,14 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
 
-public class ExportableOrderProducer extends ConcurrentExportableProducer<ExportableOrder> {
+public class OrderProducerTask extends AbstractConcurrentProducerTask<ExportableOrder> {
 
-    public ExportableOrderProducer(BlockingQueue<ExportableOrder> queue, CountDownLatch exportCountDown, Executor executor) {
+    public OrderProducerTask(BlockingQueue<ExportableOrder> queue, CountDownLatch exportCountDown, Executor executor) {
         super(queue, exportCountDown, executor);
     }
 
     @Override
-    protected List<ProcessTask> getProcessTaskList(List<ExportableOrder> exportableList, CountDownLatch processCountDown, CountDownLatch exportCountDown) {
+    protected List<AbstractProcessTask> getProcessTaskList(List<ExportableOrder> exportableList, CountDownLatch processCountDown, CountDownLatch exportCountDown) {
         return null;
     }
 

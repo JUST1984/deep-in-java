@@ -3,9 +3,10 @@ package priv.just1984.deep.in.java.demo.business.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import priv.just1984.deep.in.java.demo.business.enums.ExportType;
-import priv.just1984.deep.in.java.demo.business.factory.ExportTaskFactory;
+import priv.just1984.deep.in.java.demo.business.task.ExportTaskFactory;
 import priv.just1984.deep.in.java.demo.business.service.ExportService;
 
+import java.io.File;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
@@ -22,10 +23,7 @@ public class ExportServiceImpl implements ExportService {
 
     @Override
     public void export() {
-        CompletableFuture<Void> future = CompletableFuture.runAsync(ExportTaskFactory.INSTANCE.getExportTask(ExportType.ORDER, executor));
-        future.whenComplete((result, exception) -> {
-            //
-        });
+        CompletableFuture<File> completableFuture = CompletableFuture.supplyAsync(ExportTaskFactory.INSTANCE.getExportTask(ExportType.ORDER, executor));
     }
 
 }

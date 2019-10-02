@@ -48,10 +48,16 @@
         </dependency>
 
         <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel</artifactId>
+            <version>2.0.5</version>
+        </dependency>
+
+        <!--<dependency>
             <groupId>pers.just1984</groupId>
             <artifactId>just-framework-web-spring-boot-autoconfigure</artifactId>
             <version>1.0-SNAPSHOT</version>
-        </dependency>
+        </dependency>-->
     </dependencies>
 
     <build>

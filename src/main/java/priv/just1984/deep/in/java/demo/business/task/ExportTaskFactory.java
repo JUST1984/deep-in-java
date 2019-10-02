@@ -1,8 +1,6 @@
-package priv.just1984.deep.in.java.demo.business.factory;
+package priv.just1984.deep.in.java.demo.business.task;
 
 import priv.just1984.deep.in.java.demo.business.enums.ExportType;
-import priv.just1984.deep.in.java.demo.business.task.ExportTask;
-import priv.just1984.deep.in.java.demo.business.task.OrderExportTask;
 
 import java.util.concurrent.Executor;
 
@@ -17,7 +15,7 @@ public class ExportTaskFactory {
 
     private ExportTaskFactory() {}
 
-    public ExportTask getExportTask(ExportType type, Executor executor) {
+    public AbstractExportTask getExportTask(ExportType type, Executor executor) {
         switch (type) {
             case ORDER:
                 return new OrderExportTask(executor);

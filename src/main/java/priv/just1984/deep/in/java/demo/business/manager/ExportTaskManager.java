@@ -1,6 +1,6 @@
 package priv.just1984.deep.in.java.demo.business.manager;
 
-import priv.just1984.deep.in.java.demo.business.task.ExportTask;
+import priv.just1984.deep.in.java.demo.business.task.AbstractExportTask;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,14 +12,14 @@ import java.util.Map;
  */
 public class ExportTaskManager {
 
-    private static final Map<Long, ExportTask> MANAGER;
+    private static final Map<Long, AbstractExportTask> MANAGER;
 
     static {
         MANAGER = new HashMap<>(1 << 4);
     }
 
-    public static void put(Long exportId, ExportTask exportTask) {
-        MANAGER.put(exportId, exportTask);
+    public static void put(Long exportId, AbstractExportTask abstractExportTask) {
+        MANAGER.put(exportId, abstractExportTask);
     }
 
     public static void remove(Long exportId) {

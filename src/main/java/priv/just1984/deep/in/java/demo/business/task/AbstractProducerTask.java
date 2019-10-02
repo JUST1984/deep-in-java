@@ -1,10 +1,9 @@
-package priv.just1984.deep.in.java.demo.business.producer;
+package priv.just1984.deep.in.java.demo.business.task;
 
 import lombok.extern.slf4j.Slf4j;
 import priv.just1984.deep.in.java.demo.business.domain.Exportable;
 
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
@@ -15,13 +14,13 @@ import java.util.concurrent.CountDownLatch;
  * @date: 2019-09-27 17:56
  */
 @Slf4j
-public abstract class ExportableProducer<T extends Exportable> implements Runnable {
+public abstract class AbstractProducerTask<T extends Exportable> implements Runnable {
 
     private BlockingQueue<T> queue;
 
     protected CountDownLatch exportCountDown;
 
-    public ExportableProducer(BlockingQueue<T> queue, CountDownLatch exportCountDown) {
+    public AbstractProducerTask(BlockingQueue<T> queue, CountDownLatch exportCountDown) {
         this.queue = queue;
         this.exportCountDown = exportCountDown;
     }
@@ -34,11 +33,10 @@ public abstract class ExportableProducer<T extends Exportable> implements Runnab
                 if (needSort()) {
                     exportableList.sort(getComparator());
                 }
-                Iterator<T> iterator = exportableList.iterator();
-                while (iterator.hasNext()) {
-                    queue.put(iterator.next());
-                    iterator.remove();
+                for (T exportable : exportableList) {
+                    queue.put(exportable);
                 }
+                exportableList.clear();
             } while (hasMore());
         } catch (Exception e) {
             log.error("producer task error", e);

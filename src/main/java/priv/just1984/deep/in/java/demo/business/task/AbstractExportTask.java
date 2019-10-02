@@ -1,14 +1,14 @@
 package priv.just1984.deep.in.java.demo.business.task;
 
 import lombok.extern.slf4j.Slf4j;
-import priv.just1984.deep.in.java.demo.business.consumer.ExportableConsumer;
 import priv.just1984.deep.in.java.demo.business.domain.Exportable;
-import priv.just1984.deep.in.java.demo.business.producer.ExportableProducer;
 import priv.just1984.deep.in.java.demo.exception.ExportException;
 
+import java.io.File;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.concurrent.*;
+import java.util.function.Supplier;
 
 /**
  * @description:
@@ -16,7 +16,7 @@ import java.util.concurrent.*;
  * @date: 2019-09-27 17:24
  */
 @Slf4j
-public abstract class ExportTask<T extends Exportable> implements Runnable {
+public abstract class AbstractExportTask<T extends Exportable> implements Supplier<File> {
 
     private static final int DEFAULT_QUEUE_CAPACITY = 1000;
 
@@ -30,24 +30,27 @@ public abstract class ExportTask<T extends Exportable> implements Runnable {
 
     private BlockingQueue<T> queue;
 
-    private ExportableProducer<T> producer;
+    private AbstractProducerTask<T> producer;
 
-    private ExportableConsumer<T> consumer;
+    private AbstractConsumerTask<T> consumer;
+
+    private File file;
 
     private Instant start;
 
-    public ExportTask(Executor executor) {
+    public AbstractExportTask(Executor executor) {
         this.executor = executor;
         this.exportCount = getExportCount();
         this.exportCountDown = new CountDownLatch(exportCount);
         this.queue = new LinkedBlockingQueue<>(getQueueCapacity());
+        this.file = generateFile();
         this.producer = generateProducer(queue, exportCountDown, executor);
-        this.consumer = generateConsumer(queue, exportCountDown);
+        this.consumer = generateConsumer(queue, exportCountDown, file);
         this.start = Instant.now();
     }
 
     @Override
-    public void run() {
+    public File get() {
         executor.execute(producer);
         executor.execute(consumer);
         try {
@@ -57,6 +60,7 @@ public abstract class ExportTask<T extends Exportable> implements Runnable {
             throw new ExportException();
         }
         log.info("export finish, cost {} seconds", Duration.between(start, Instant.now()).toMillis() / 1000);
+        return file;
     }
 
     public double getRate() {
@@ -74,14 +78,20 @@ public abstract class ExportTask<T extends Exportable> implements Runnable {
     protected abstract int getExportCount();
 
     /**
+     * 生成结果文件
+     * @return
+     */
+    protected abstract File generateFile();
+
+    /**
      * 构建生产者任务
      * @param queue
      * @param exportCountDown
      * @param executor
      * @return
      */
-    protected abstract ExportableProducer<T> generateProducer(BlockingQueue<T> queue, CountDownLatch exportCountDown,
-                                                              Executor executor);
+    protected abstract AbstractProducerTask<T> generateProducer(BlockingQueue<T> queue, CountDownLatch exportCountDown,
+                                                                Executor executor);
 
     /**
      * 构建消费者任务
@@ -89,6 +99,7 @@ public abstract class ExportTask<T extends Exportable> implements Runnable {
      * @param exportCountDown
      * @return
      */
-    protected abstract ExportableConsumer<T> generateConsumer(BlockingQueue<T> queue, CountDownLatch exportCountDown);
+    protected abstract AbstractConsumerTask<T> generateConsumer(BlockingQueue<T> queue, CountDownLatch exportCountDown,
+                                                                File file);
 
 }

@@ -1,11 +1,8 @@
 package priv.just1984.deep.in.java.demo.business.task;
 
-import priv.just1984.deep.in.java.demo.business.consumer.ExportableConsumer;
-import priv.just1984.deep.in.java.demo.business.consumer.ExportableOrderConsumer;
 import priv.just1984.deep.in.java.demo.business.domain.ExportableOrder;
-import priv.just1984.deep.in.java.demo.business.producer.ExportableOrderProducer;
-import priv.just1984.deep.in.java.demo.business.producer.ExportableProducer;
 
+import java.io.File;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
@@ -15,7 +12,7 @@ import java.util.concurrent.Executor;
  * @author: yixiezi1994@gmail.com
  * @date: 2019-09-30 18:12
  */
-public class OrderExportTask extends ExportTask<ExportableOrder> {
+public class OrderExportTask extends AbstractExportTask<ExportableOrder> {
 
     public OrderExportTask(Executor executor) {
         super(executor);
@@ -27,13 +24,19 @@ public class OrderExportTask extends ExportTask<ExportableOrder> {
     }
 
     @Override
-    protected ExportableProducer<ExportableOrder> generateProducer(BlockingQueue<ExportableOrder> queue, CountDownLatch exportCountDown, Executor executor) {
-        return new ExportableOrderProducer(queue, exportCountDown, executor);
+    protected File generateFile() {
+        return null;
     }
 
     @Override
-    protected ExportableConsumer<ExportableOrder> generateConsumer(BlockingQueue<ExportableOrder> queue, CountDownLatch exportCountDown) {
-        return new ExportableOrderConsumer(queue, exportCountDown);
+    protected AbstractProducerTask<ExportableOrder> generateProducer(BlockingQueue<ExportableOrder> queue, CountDownLatch exportCountDown, Executor executor) {
+        return new OrderProducerTask(queue, exportCountDown, executor);
     }
+
+    @Override
+    protected AbstractConsumerTask<ExportableOrder> generateConsumer(BlockingQueue<ExportableOrder> queue, CountDownLatch exportCountDown, File file) {
+        return new ConsumerToExcelTask<ExportableOrder>(queue, exportCountDown, file) {};
+    }
+
 
 }

@@ -1,5 +1,6 @@
 package priv.just1984.deep.in.java.demo.business.domain;
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Data;
 
 import java.util.Date;
@@ -12,6 +13,13 @@ import java.util.Date;
 @Data
 public class ExportableOrder implements Exportable {
 
+    @ExcelProperty("订单ID")
+    private Long orderId;
+
+    @ExcelProperty("订单编号")
+    private String orderNo;
+
+    @ExcelProperty("下单日期")
     private Date createDate;
 
 }
