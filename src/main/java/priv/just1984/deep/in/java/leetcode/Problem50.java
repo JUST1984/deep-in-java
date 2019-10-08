@@ -34,17 +34,24 @@ import static sun.net.ftp.FtpReplyCode.find;
 public class Problem50 {
 
     public static void main(String[] args) {
-        System.out.println(myPow(2d, 100));
+        System.out.println(myPow(1d, -2147483648));
     }
 
     public static double myPow(double x, int n) {
-        if (n == 0) return 1d;
-        if (n < 0) return 1 / myPow(x, -n);
-        if ((n & 1) == 0) {
-            return myPow(x * x, n >> 1);
-        } else {
-            return myPow(x, n - 1) * x;
+        long N = n;
+        if (n < 0) {
+            x = 1 / x;
+            N = -N;
         }
+        double ans = 1d;
+        while (N > 0) {
+            if ((N & 1) == 1) {
+                ans *= x;
+            }
+            x = x * x;
+            N = N >> 1;
+        }
+        return ans;
     }
 
 }
