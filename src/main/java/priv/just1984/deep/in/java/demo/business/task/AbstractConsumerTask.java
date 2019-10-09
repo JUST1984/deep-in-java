@@ -30,9 +30,8 @@ public abstract class AbstractConsumerTask<T extends Exportable> implements Runn
     @Override
     public void run() {
         try {
-            while (true) {
-                T exportable = queue.take();
-                process(exportable, file);
+            while (exportCountDown.getCount() > 0) {
+                process(queue.take(), file);
                 exportCountDown.countDown();
             }
         } catch (Exception e) {
@@ -43,6 +42,7 @@ public abstract class AbstractConsumerTask<T extends Exportable> implements Runn
     /**
      * 处理数据
      * @param exportable
+     * @param file
      */
     protected abstract void process(T exportable, File file);
 

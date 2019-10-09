@@ -15,7 +15,7 @@ public class ExportTaskFactory {
 
     private ExportTaskFactory() {}
 
-    public AbstractExportTask getExportTask(ExportType type, Executor executor) {
+    public AbstractExportTask<?> getExportTask(ExportType type, Executor executor) {
         switch (type) {
             case ORDER:
                 return new OrderExportTask(executor);

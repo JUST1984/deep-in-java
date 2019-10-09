@@ -18,9 +18,9 @@ import java.util.function.Supplier;
 @Slf4j
 public abstract class AbstractExportTask<T extends Exportable> implements Supplier<File> {
 
-    private static final int DEFAULT_QUEUE_CAPACITY = 1000;
+    private static final int DEFAULT_QUEUE_CAPACITY = 1 << 10;
 
-    private static final int DEFAULT_MAX_EXPORT_SECONDS = 600;
+    private static final int DEFAULT_MAX_EXPORT_SECONDS = 30 * 60;
 
     private Executor executor;
 
@@ -39,14 +39,14 @@ public abstract class AbstractExportTask<T extends Exportable> implements Suppli
     private Instant start;
 
     public AbstractExportTask(Executor executor) {
+        this.start = Instant.now();
         this.executor = executor;
         this.exportCount = getExportCount();
         this.exportCountDown = new CountDownLatch(exportCount);
-        this.queue = new LinkedBlockingQueue<>(getQueueCapacity());
+        this.queue = new LinkedBlockingQueue<>(DEFAULT_QUEUE_CAPACITY);
         this.file = generateFile();
         this.producer = generateProducer(queue, exportCountDown, executor);
         this.consumer = generateConsumer(queue, exportCountDown, file);
-        this.start = Instant.now();
     }
 
     @Override
@@ -56,8 +56,7 @@ public abstract class AbstractExportTask<T extends Exportable> implements Suppli
         try {
             exportCountDown.await(DEFAULT_MAX_EXPORT_SECONDS, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
-            log.error("export task interrupted", e);
-            throw new ExportException();
+            throw new ExportException("export timeout (over 10 minutes)");
         }
         log.info("export finish, cost {} seconds", Duration.between(start, Instant.now()).toMillis() / 1000);
         return file;
@@ -65,10 +64,6 @@ public abstract class AbstractExportTask<T extends Exportable> implements Suppli
 
     public double getRate() {
         return ((double) exportCount - (double) exportCountDown.getCount()) / (double) exportCount;
-    }
-
-    protected int getQueueCapacity() {
-        return DEFAULT_QUEUE_CAPACITY;
     }
 
     /**
@@ -97,6 +92,7 @@ public abstract class AbstractExportTask<T extends Exportable> implements Suppli
      * 构建消费者任务
      * @param queue
      * @param exportCountDown
+     * @param file
      * @return
      */
     protected abstract AbstractConsumerTask<T> generateConsumer(BlockingQueue<T> queue, CountDownLatch exportCountDown,

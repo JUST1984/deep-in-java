@@ -13,6 +13,11 @@ import java.util.UUID;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
 
+/**
+ * @description:
+ * @author: yixiezi1994@gmail.com
+ * @date: 2019-09-29 18:08
+ */
 @Slf4j
 public class ConsumerToExcelTask<T extends Exportable> extends AbstractConsumerTask<T> {
 
@@ -27,6 +32,7 @@ public class ConsumerToExcelTask<T extends Exportable> extends AbstractConsumerT
     @Override
     protected void process(T exportable, File file) {
         try {
+            init(exportable, file);
             writer.write(Arrays.asList(exportable), sheet);
         } catch (Exception e) {
             log.error("export to excel error", e);

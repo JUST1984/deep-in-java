@@ -8,6 +8,11 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
 
+/**
+ * @description:
+ * @author: yixiezi1994@gmail.com
+ * @date: 2019-09-30 18:12
+ */
 public class OrderProducerTask extends AbstractConcurrentProducerTask<ExportableOrder> {
 
     public OrderProducerTask(BlockingQueue<ExportableOrder> queue, CountDownLatch exportCountDown, Executor executor) {

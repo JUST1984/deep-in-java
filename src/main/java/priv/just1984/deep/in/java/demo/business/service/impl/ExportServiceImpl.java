@@ -23,7 +23,11 @@ public class ExportServiceImpl implements ExportService {
 
     @Override
     public void export() {
-        CompletableFuture<File> completableFuture = CompletableFuture.supplyAsync(ExportTaskFactory.INSTANCE.getExportTask(ExportType.ORDER, executor));
+        CompletableFuture<File> future = CompletableFuture
+                .supplyAsync(ExportTaskFactory.INSTANCE.getExportTask(ExportType.ORDER, executor));
+        future.whenComplete((file, ex) -> {
+
+        });
     }
 
 }

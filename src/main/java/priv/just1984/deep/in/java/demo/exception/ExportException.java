@@ -6,4 +6,11 @@ package priv.just1984.deep.in.java.demo.exception;
  * @date: 2019-09-29 9:09
  */
 public class ExportException extends RuntimeException {
+
+    public ExportException() {}
+
+    public ExportException(String message) {
+        super(message);
+    }
+
 }

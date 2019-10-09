@@ -40,16 +40,12 @@ public abstract class AbstractProducerTask<T extends Exportable> implements Runn
             } while (hasMore());
         } catch (Exception e) {
             log.error("producer task error", e);
-        } finally {
-            release();
         }
     }
 
     protected boolean hasMore() {
         return false;
     }
-
-    protected void release() {}
 
     /**
      * 是否需要排序
