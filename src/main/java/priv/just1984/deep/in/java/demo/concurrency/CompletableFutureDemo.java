@@ -11,7 +11,7 @@ public class CompletableFutureDemo {
 
     public static void main(String[] args) {
         CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
-            // throw new ExportException();
+            // throw new BusException();
         });
         future.whenComplete((ret, ex) -> {
             System.out.println(ex);

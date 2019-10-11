@@ -2,7 +2,7 @@ package priv.just1984.deep.in.java.demo.business.task;
 
 import lombok.extern.slf4j.Slf4j;
 import priv.just1984.deep.in.java.demo.business.domain.Exportable;
-import priv.just1984.deep.in.java.demo.exception.ExportException;
+import priv.just1984.deep.in.java.demo.business.exception.BusException;
 
 import java.io.File;
 import java.time.Duration;
@@ -56,12 +56,16 @@ public abstract class AbstractExportTask<T extends Exportable> implements Suppli
         try {
             exportCountDown.await(DEFAULT_MAX_EXPORT_SECONDS, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
-            throw new ExportException("export timeout (over 10 minutes)");
+            throw new BusException("export timeout (over 30 minutes)");
         }
         log.info("export finish, cost {} seconds", Duration.between(start, Instant.now()).toMillis() / 1000);
         return file;
     }
 
+    /**
+     * 获取导出进度（0~1）
+     * @return
+     */
     public double getRate() {
         return ((double) exportCount - (double) exportCountDown.getCount()) / (double) exportCount;
     }

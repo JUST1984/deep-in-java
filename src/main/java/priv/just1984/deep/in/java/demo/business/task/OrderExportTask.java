@@ -38,5 +38,4 @@ public class OrderExportTask extends AbstractExportTask<ExportableOrder> {
         return new ConsumerToExcelTask<ExportableOrder>(queue, exportCountDown, file) {};
     }
 
-
 }
