@@ -25,7 +25,7 @@ public class ExportServiceImpl implements ExportService {
     public void export() {
         CompletableFuture.supplyAsync(ExportTaskFactory.INSTANCE.getExportTask(ExportType.ORDER, executor))
                 .whenComplete((file, ex) -> {
-                    if (Objects.nonNull(ex)) {
+                    if (Objects.isNull(ex)) {
                         // 成功处理
                     } else {
                         // 失败处理

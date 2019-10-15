@@ -11,7 +11,7 @@ import java.util.concurrent.*;
 import java.util.function.Supplier;
 
 /**
- * @description:
+ * @description: 批量导出任务
  * @author: yixiezi1994@gmail.com
  * @date: 2019-09-27 17:24
  */
