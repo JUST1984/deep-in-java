@@ -8,6 +8,9 @@ package priv.just1984.deep.in.java.basic.demo;
 public class StringDemo {
 
     public static void main(String[] args) {
+
+        System.out.println(String.valueOf(null));
+
         String str1 = "HelloFlyapi";
         String str2 = "HelloFlyapi";
         String str3 = new String("HelloFlyapi");
