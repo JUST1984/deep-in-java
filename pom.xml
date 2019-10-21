@@ -7,6 +7,9 @@
         <module>basic</module>
         <module>webmvc</module>
         <module>webflux</module>
+        <module>dubbo-provider</module>
+        <module>dubbo-consumer</module>
+        <module>dubbo-api</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
