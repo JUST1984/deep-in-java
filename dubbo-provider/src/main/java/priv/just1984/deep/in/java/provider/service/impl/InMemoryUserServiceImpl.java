@@ -4,6 +4,7 @@ import org.apache.dubbo.config.annotation.Service;
 import priv.just1984.deep.in.java.dubbo.api.service.UserService;
 import priv.just1984.deep.in.java.dubbo.api.vo.User;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -17,6 +18,11 @@ import java.util.List;
 public class InMemoryUserServiceImpl implements UserService {
 
     private static final List<User> users = Collections.synchronizedList(new ArrayList<>());
+
+    @PostConstruct
+    public void init() {
+        users.add(new User(0L, "JUST1984", 26));
+    }
 
     @Override
     public void add(User user) {

@@ -1,11 +1,11 @@
 package priv.just1984.deep.in.java.dubbo.consumer.controller;
 
+import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import priv.just1984.deep.in.java.dubbo.api.service.UserService;
 import priv.just1984.deep.in.java.dubbo.api.vo.User;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping("/consumer")
 public class ConsumerController {
 
-    @Resource
+    @Reference
     private UserService userService;
 
     @RequestMapping("/getAll")
