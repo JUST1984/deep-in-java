@@ -4,9 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import priv.just1984.deep.in.java.webmvc.customize.annotation.RequestBodyDecoder;
 
 import java.util.List;
 
@@ -21,8 +21,9 @@ import java.util.List;
 public class RequestBodyDemo {
 
     @PostMapping("/list")
-    public void list(@RequestBody List<User> userList) {
-        log.info(JSONObject.toJSONString(userList));
+    public void list(@RequestBodyDecoder String name, @RequestBodyDecoder List<User> list) {
+        log.info(name);
+        log.info(JSONObject.toJSONString(list));
     }
 
     @Data

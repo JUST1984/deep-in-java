@@ -1,8 +1,11 @@
 package priv.just1984.deep.in.java.basic.demo;
 
-import java.util.Arrays;
-import java.util.List;
+import lombok.Data;
+
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @description:
@@ -12,16 +15,26 @@ import java.util.stream.Collectors;
 public class StreamDemo {
 
     public static void main(String[] args) {
-        List<Integer> list = Arrays.asList(1, 2, 3, 4);
+        List<Item> sources = new ArrayList<>();
+        Map<String, List<Item>> map = sources.stream().collect(Collectors.groupingBy(Item::getTypeId));
+        List<Item> res = map.values().stream().map(list -> list.stream()
+                .min(Comparator.comparingInt(Item::getExpireType).thenComparing(Item::getExpireTime, Comparator.reverseOrder()))
+                .get()).collect(Collectors.toList());
 
-        boolean res = list.stream().collect(Collectors.toMap(x -> x, x -> 1, (x, y) -> x + 1))
-                .values().stream().anyMatch(x -> x > 1);
 
-        System.out.println(res);
+        /*Stream<Stream<Integer>> stream = Stream.of(Stream.of(1, 2, 3), Stream.of(4, 5, 6), Stream.of(7, 8, 9));
+        Stream<Integer> res = stream.flatMap(Function.identity());
+        res.forEach(System.out::print);*/
+    }
 
-        boolean res2 = list.stream().distinct().count() < list.size();
+    @Data
+    private static class Item {
 
-        System.out.println(res2);
+        private String typeId;
+
+        private int expireType;
+
+        private Date expireTime;
 
     }
 
