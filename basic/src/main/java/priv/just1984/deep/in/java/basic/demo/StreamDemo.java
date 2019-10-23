@@ -1,11 +1,11 @@
 package priv.just1984.deep.in.java.basic.demo;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.util.*;
-import java.util.function.Function;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @description:
@@ -15,26 +15,54 @@ import java.util.stream.Stream;
 public class StreamDemo {
 
     public static void main(String[] args) {
-        List<Item> sources = new ArrayList<>();
-        Map<String, List<Item>> map = sources.stream().collect(Collectors.groupingBy(Item::getTypeId));
-        List<Item> res = map.values().stream().map(list -> list.stream()
-                .min(Comparator.comparingInt(Item::getExpireType).thenComparing(Item::getExpireTime, Comparator.reverseOrder()))
-                .get()).collect(Collectors.toList());
-
-
-        /*Stream<Stream<Integer>> stream = Stream.of(Stream.of(1, 2, 3), Stream.of(4, 5, 6), Stream.of(7, 8, 9));
-        Stream<Integer> res = stream.flatMap(Function.identity());
-        res.forEach(System.out::print);*/
+        List<A> aList = new ArrayList<>();
+        List<B> bList = new ArrayList<>();
+        List<C> res = aList.stream().filter(a -> !bList.contains(a)).map(C::ofA).collect(Collectors.toList());
     }
 
     @Data
-    private static class Item {
+    private static class A {
 
-        private String typeId;
+        private Long id;
 
-        private int expireType;
+        private String type;
 
-        private Date expireTime;
+    }
+
+    @Data
+    @AllArgsConstructor
+    private static class B {
+
+        private Long id;
+
+        private String type;
+
+        @Override
+        public boolean equals(Object o) {
+            if (o instanceof A) {
+                return this.equals(ofA(A.class.cast(o)));
+            }
+            // ...
+            return false;
+        }
+
+        public static B ofA(A a) {
+            return new B(a.getId(), a.getType());
+        }
+
+    }
+
+    @Data
+    @AllArgsConstructor
+    private static class C {
+
+        private Long id;
+
+        private String type;
+
+        public static C ofA(A a) {
+            return new C(a.getId(), a.getType());
+        }
 
     }
 
