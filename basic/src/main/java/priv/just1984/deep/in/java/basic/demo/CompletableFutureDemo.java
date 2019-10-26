@@ -61,7 +61,8 @@ public class CompletableFutureDemo {
         for (int i = 0; i < 100; i++) {
             int j = i;
             future = future.thenCombine(CompletableFuture.supplyAsync(() -> {
-                System.out.println(j);
+                System.out.printf("线程：【%s】，编号：【%s】\n", Thread.currentThread().getName(), j);
+                sleep(1000);
                 return j;
             }), (list, res) -> {
                 list.add(res);
