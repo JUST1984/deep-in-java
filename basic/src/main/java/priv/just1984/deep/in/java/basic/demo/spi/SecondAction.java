@@ -5,9 +5,11 @@ package priv.just1984.deep.in.java.basic.demo.spi;
  * @author: yixiezi1994@gmail.com
  * @date: 2019-11-01 10:51
  */
-public class EatShit implements Eat {
+public class SecondAction implements Action {
+
     @Override
-    public void eat() {
-        System.out.println("eat shit ...");
+    public void doSomething() {
+        System.out.println("second action ...");
     }
+
 }

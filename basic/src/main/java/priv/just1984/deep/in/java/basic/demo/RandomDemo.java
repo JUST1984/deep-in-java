@@ -1,4 +1,4 @@
-package priv.just1984.deep.in.java.basic.demo.spi;
+package priv.just1984.deep.in.java.basic.demo;
 
 import java.util.Random;
 

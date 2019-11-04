@@ -11,11 +11,11 @@ import java.util.ServiceLoader;
 public class SpiDemo {
 
     public static void main(String[] args) {
-        ServiceLoader<Eat> eatServices = ServiceLoader.load(Eat.class);
-        Iterator<Eat> iterator = eatServices.iterator();
+        ServiceLoader<Action> eatServices = ServiceLoader.load(Action.class);
+        Iterator<Action> iterator = eatServices.iterator();
         while (iterator.hasNext()) {
-            Eat eat = iterator.next();
-            eat.eat();
+            Action action = iterator.next();
+            action.doSomething();
         }
     }
 }
