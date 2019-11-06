@@ -1,6 +1,7 @@
 package priv.just1984.deep.in.java.basic.demo;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * @description:
@@ -10,8 +11,8 @@ import java.math.BigDecimal;
 public class BigDecimalDemo {
 
     public static void main(String[] args) {
-        BigDecimal b = new BigDecimal("2.34");
-        System.out.println(b);
+        String res = BigDecimal.valueOf(6100).divide(BigDecimal.valueOf(200), 0, RoundingMode.CEILING).toString();
+        System.out.println(res);
     }
 
 }
