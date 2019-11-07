@@ -1,7 +1,8 @@
-package priv.just1984.deep.in.java.basic.demo;
+package priv.just1984.deep.in.java.webmvc.demo;
+
+import org.springframework.util.StopWatch;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
@@ -97,26 +98,32 @@ public class CompletableFutureDemo {
         future.get();
         System.out.println(res);*/
 
+        StopWatch stopWatch = new StopWatch();
+
+        stopWatch.start("process1");
         // 效率低
         CompletableFuture<ArrayList<Integer>> future = CompletableFuture.supplyAsync(ArrayList<Integer>::new);
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 1000000; i++) {
             final int j = i;
-            future = future.thenCombineAsync(CompletableFuture.supplyAsync(() -> j), (list, data) -> {
+            future = future.thenCombineAsync(CompletableFuture.supplyAsync(() -> j, executorService), (list, data) -> {
                 list.add(data);
                 return list;
             });
         }
-        ArrayList<Integer> res = future.get();
-        System.out.println(res);
+        future.get();
+        stopWatch.stop();
 
+        stopWatch.start("process2");
         // 效率高
-        List<CompletableFuture<Integer>> futures = Stream.iterate(0, i -> i + 1).limit(1000).map(i ->
-                CompletableFuture.supplyAsync(() -> i)).collect(Collectors.toList());
+        List<CompletableFuture<Integer>> futures = Stream.iterate(0, i -> i + 1).limit(1000000).map(i ->
+                CompletableFuture.supplyAsync(() -> i, executorService)).collect(Collectors.toList());
         CompletableFuture<Void> allFuture = CompletableFuture.allOf(futures.toArray(new CompletableFuture[futures.size()]));
         CompletableFuture<List<Integer>> resFuture = allFuture.thenApply(v ->
                 futures.stream().map(CompletableFuture::join).collect(Collectors.toList()));
-        System.out.println(resFuture.get());
+        resFuture.get();
+        stopWatch.stop();
 
+        System.out.println(stopWatch.prettyPrint());
 
 
         sleep(100000);
