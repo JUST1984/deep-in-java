@@ -11,8 +11,10 @@ import java.math.RoundingMode;
 public class BigDecimalDemo {
 
     public static void main(String[] args) {
-        String res = BigDecimal.valueOf(6100).divide(BigDecimal.valueOf(200), 0, RoundingMode.CEILING).toString();
-        System.out.println(res);
+        BigDecimal a = new BigDecimal("100");
+        BigDecimal b = new BigDecimal("-10");
+        BigDecimal c = a.add(b);
+        System.out.println(c);
     }
 
 }
